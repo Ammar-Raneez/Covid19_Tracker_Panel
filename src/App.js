@@ -8,10 +8,14 @@ import {sortData, prettyPrintStat} from './util';
 import LineGraph from './LineGraph';
 import "leaflet/dist/leaflet.css";
 
+
 function App() {
 	const [countries, setCountries] = useState([]);
 	const [country, setCountry] = useState("Worldwide");
 	const [countryInfo, setCountryInfo] = useState({});
+
+	//theme setter
+	const [theme, setTheme] = useState("LightMode");
 
 	//for table
 	const [tableData, setTableData] = useState([]);
@@ -71,49 +75,60 @@ function App() {
 
 				//whole data for chosen country
 				setCountryInfo(data);
-				console.log(data);
 
 				//set center of map to current clicked countries lat and lng
-				setMapCenter([data.countryInfo.lat, data.countryInfo.long]);
+				if(countryCode !== 'Worldwide')
+					setMapCenter([data.countryInfo.lat, data.countryInfo.long]);
+				else	//if worldwide, set to initial state
+					setMapCenter([34.80746, -40.4796]);
 				setMapZoom(4);
 			})
 	}
 
 
 	return (
-		<div className="app">
+		<div className={`app ${theme}`}>
 			<div className="app__left">
 				{/*header*/}
 				{/*title + select input dropdown field*/}
 				<div className="app__header">
 					<h1>COVID-19 TRACKER</h1>
-					<FormControl className="app__dropdown">
-						<Select variant="outlined" value={country} onChange={onCountryChange}>
-							<MenuItem value="Worldwide">Worldwide</MenuItem>
-							{/*loop through all the countries and display them as menu items*/}
-							{countries.map(country => <MenuItem value={country.value}>{country.name}</MenuItem>)}
-						</Select>
-					</FormControl>
+					<div className="app__selectboxes">
+						<FormControl className={`app__dropdown ${theme}`}>
+							<Select className={theme} variant="outlined" value={country} onChange={onCountryChange}>
+								<MenuItem className={`app__dropdown__moveTop ${theme === 'DarkMode'? 'DarkMode borders': ''}`} value="Worldwide">Worldwide</MenuItem>
+								{/*loop through all the countries and display them as menu items*/}
+								{countries.map(country => <MenuItem className={`app__dropdown__moveBottom ${theme === 'DarkMode'? 'DarkMode borders': ''}`} value={country.value}>{country.name}</MenuItem>)}
+							</Select>
+						</FormControl>
+
+						<FormControl className={`app__dropdown ${theme}`}>
+							<Select className={theme} variant="outlined" value={theme} onChange={e => setTheme(e.target.value)}>
+								<MenuItem className={`app__dropdown__moveTop ${theme === 'DarkMode'? 'DarkMode borders': ''}`} value="LightMode">LightMode</MenuItem>
+								<MenuItem className={`app__dropdown__moveBottom ${theme === 'DarkMode'? 'DarkMode borders': ''}`} value="DarkMode">DarkMode</MenuItem>
+							</Select>
+						</FormControl>
+					</div>
 				</div>
 
 				{/*info boxes, the fields used are what are specified on the fetched data*/}
 				<div className="app__stats">
-					<InfoBox isRed active={casesType === 'cases'} onClick={e => setCasesType("cases")} title="Coronavirus cases" cases={prettyPrintStat(countryInfo.todayCases)} total={prettyPrintStat(countryInfo.cases)} />
-					<InfoBox isGreen active={casesType === 'recovered'} onClick={e => setCasesType("recovered")} title="Recovered" cases={prettyPrintStat(countryInfo.todayRecovered)} total={prettyPrintStat(countryInfo.recovered)} />
-					<InfoBox isBlack active={casesType === 'deaths'} onClick={e => setCasesType("deaths")} title="Deaths" cases={prettyPrintStat(countryInfo.todayDeaths)} total={prettyPrintStat(countryInfo.deaths)} />
+					<InfoBox theme={theme} isRed active={casesType === 'cases'} onClick={e => setCasesType("cases")} title="Coronavirus cases" cases={prettyPrintStat(countryInfo.todayCases)} total={prettyPrintStat(countryInfo.cases)} />
+					<InfoBox theme={theme} isGreen active={casesType === 'recovered'} onClick={e => setCasesType("recovered")} title="Recovered" cases={prettyPrintStat(countryInfo.todayRecovered)} total={prettyPrintStat(countryInfo.recovered)} />
+					<InfoBox theme={theme} isBlack active={casesType === 'deaths'} onClick={e => setCasesType("deaths")} title="Deaths" cases={prettyPrintStat(countryInfo.todayDeaths)} total={prettyPrintStat(countryInfo.deaths)} />
 				</div>
 
 				{/*map*/}
-				<Map casesType={casesType} countries={mapCountries} center={mapCenter} zoom={mapZoom}/>
+				<Map theme={theme} casesType={casesType} countries={mapCountries} center={mapCenter} zoom={mapZoom}/>
 			</div>
 
-			<Card className="app__right">
+			<Card className={`app__right ${theme}`}>
 				{/*table, graph*/}
 				<CardContent>
-					<h3>Live Cases by Country</h3>
-					<Table countries={tableData} />
-					<h3 className="app__graphTitle">Worldwide new {casesType}</h3>
-					<LineGraph className="app__graph" casesType={casesType} />
+					<h3 className={`${theme}`}>Live Cases by Country</h3>
+					<Table theme={theme} countries={tableData} />
+					<h3 className={`app__graphTitle ${theme}`}>Worldwide new {casesType}</h3>
+					<LineGraph theme={theme} className="app__graph" casesType={casesType} />
 				</CardContent>
 			</Card>
 		</div>

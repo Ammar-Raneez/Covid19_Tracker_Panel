@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Line } from 'react-chartjs-2';
 import numeral from 'numeral';
+import './Line.css';
 
 
 //sort of a config for chartjs
@@ -44,6 +45,26 @@ const options = {
 //default to cases if theres no cases type
 function LineGraph({casesType='cases', ...props}) {
     const [data, setData] = useState({});
+    const [graphColorBorder, setGraphColorBorder] = useState('#cc1034');
+    const [graphColorBg, setGraphColorBg] = useState('rgba(204, 16, 52, 0.5)');
+
+
+    //use effect to set graphColor
+    useEffect(() => {
+        switch(casesType) {
+            case 'deaths':
+                setGraphColorBorder('#333');
+                setGraphColorBg('rgba(0, 0, 0, 0.5)');
+                break;
+            case 'recovered':
+                setGraphColorBorder('greenyellow');
+                setGraphColorBg('rgba(173, 255, 47, 0.5)');
+                break;
+            default:
+                setGraphColorBorder('#cc1034');
+                setGraphColorBg('rgba(204, 16, 52, 0.5)');
+        }
+    }, [casesType])
 
 
     const buildChartData = (data, casesType='cases') => {
@@ -81,8 +102,8 @@ function LineGraph({casesType='cases', ...props}) {
 
 
     return (
-        <div className={props.className}>                               {/*necessary for chartjs, data key: our state data*/}
-            {data?.length > 0 && <Line data={{datasets: [{data: data, borderColor: "#cc1034", backgroundColor: "rgba(204, 16, 52, 0.5)"}]}} options={options}/>}
+        <div className={`${props.className} ${props.theme}`}>   {/*necessary for chartjs, data key: our state data, border and bgColor defined as well*/}
+            {data?.length > 0 && <Line data={{datasets: [{data: data, borderColor: graphColorBorder, backgroundColor: graphColorBg}]}} options={options}/>}
         </div>
     )       //optional chaining - initially checks whether data actually exists (in the data there's a time where there's no data), then checks whether the length of it is greater than 0
 }

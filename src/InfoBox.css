@@ -19,13 +19,16 @@
 }
 
 .infoBox--black {
-    border-top: 10px solid #222;
+    border-top: 10px solid black;
+    transform: scale(1.05);
 }
 .infoBox--green {
     border-top: 10px solid greenyellow;
+    transform: scale(1.05);
 }
 .infoBox--red {
     border-top: 10px solid #cc1034;
+    transform: scale(1.05);
 }
 
 .infoBox__cases {
@@ -49,4 +52,13 @@
 }
 .infoBox--text--black {
     color: #222 !important;
+}
+
+.DarkMode {
+    background-color: #222 !important;
+    color: white !important;
+}
+
+.forBlack {
+    color: white !important;
 }

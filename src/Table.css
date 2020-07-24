@@ -21,3 +21,13 @@
 .table tr:nth-of-type(odd) {
     background-color: #f3f2f8;
 }
+
+.DarkMode {
+    background-color: #222 !important;
+    color: white;
+}
+
+.DarkMode tr:nth-child(odd) {
+    border-top: 2px solid #fc3c3c;
+    border-bottom: 2px solid #fc3c3c;
+}
