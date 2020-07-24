@@ -42,23 +42,8 @@ const options = {
 
 
 //default to cases if theres no cases type
-function LineGraph({casesType = 'cases'}) {
+function LineGraph({casesType='cases', ...props}) {
     const [data, setData] = useState({});
-
-
-    useEffect(() => {
-        //whenever you use a fetch() inside an useEffect, include the asycn and await
-        const fetchData = async () => {
-            await fetch("https://disease.sh/v3/covid-19/historical/all?lastdays=120")
-                .then(response => response.json())
-                .then(data => {
-                    const chartData = buildChartData(data);
-                    setData(chartData);
-                })
-        }   //displays data for past 120 days
-        fetchData()
-    }, [casesType])
-        //we pass this cuz a change in casesType must re run the fetch
 
 
     const buildChartData = (data, casesType='cases') => {
@@ -80,8 +65,23 @@ function LineGraph({casesType = 'cases'}) {
     }
 
 
+    useEffect(() => {
+        //whenever you use a fetch() inside an useEffect, include the asycn and await
+        const fetchData = async () => {
+            await fetch("https://disease.sh/v3/covid-19/historical/all?lastdays=120")
+                .then(response => response.json())
+                .then(data => {
+                    const chartData = buildChartData(data, casesType);
+                    setData(chartData);
+                })
+        }   //displays data for past 120 days
+        fetchData()
+    }, [casesType])
+        //we pass this cuz a change in casesType must re run the fetch
+
+
     return (
-        <div>                               {/*necessary for chartjs, data key: our state data*/}
+        <div className={props.className}>                               {/*necessary for chartjs, data key: our state data*/}
             {data?.length > 0 && <Line data={{datasets: [{data: data, borderColor: "#cc1034", backgroundColor: "rgba(204, 16, 52, 0.5)"}]}} options={options}/>}
         </div>
     )       //optional chaining - initially checks whether data actually exists (in the data there's a time where there's no data), then checks whether the length of it is greater than 0

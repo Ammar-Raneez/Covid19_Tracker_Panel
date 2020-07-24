@@ -4,15 +4,24 @@ import './App.css';
 import InfoBox from './InfoBox';	
 import Map from './Map';
 import Table from './Table';
-import {sortData} from './util';
+import {sortData, prettyPrintStat} from './util';
 import LineGraph from './LineGraph';
+import "leaflet/dist/leaflet.css";
 
 function App() {
 	const [countries, setCountries] = useState([]);
 	const [country, setCountry] = useState("Worldwide");
 	const [countryInfo, setCountryInfo] = useState({});
+
+	//for table
 	const [tableData, setTableData] = useState([]);
 
+	//for leaflet map
+	const [mapCenter, setMapCenter] = useState({lat: 34.80746, lng: -40.4796});
+	const [mapZoom, setMapZoom] = useState(3);
+	const [mapCountries, setMapCountries] = useState([]);
+	//for different circle coloring, based on cases type, cases set to default cuz thats the first we wanna look at
+	const [casesType, setCasesType] = useState("cases");
 
 	//effect that handles the initial display of worldwide data, since this runs whenever page loads this data is initally displayed
 	useEffect(() => {
@@ -31,12 +40,14 @@ function App() {
 					//map through the json data, and add the name and value of the country to countries
 					const countries = data.map(country => (
 						{name: country.country, value: country.countryInfo.iso2}
-					))
+					))	//United States/ United Kingdom, USA/UK
 
 					setCountries(countries);
 
 					const sortedData = sortData(data);
 					setTableData(sortedData);		//here we pass the entire json data, for our Table component
+
+					setMapCountries(data);
 				});
 		};
 		//how we handle async function calls inside of an useEffect
@@ -60,9 +71,13 @@ function App() {
 
 				//whole data for chosen country
 				setCountryInfo(data);
+				console.log(data);
+
+				//set center of map to current clicked countries lat and lng
+				setMapCenter([data.countryInfo.lat, data.countryInfo.long]);
+				setMapZoom(4);
 			})
 	}
-	console.log(countryInfo);
 
 
 	return (
@@ -83,13 +98,13 @@ function App() {
 
 				{/*info boxes, the fields used are what are specified on the fetched data*/}
 				<div className="app__stats">
-					<InfoBox title="Coronavirus cases" cases={countryInfo.todayCases} total={countryInfo.cases} />
-					<InfoBox title="Recovered" cases={countryInfo.todayRecovered} total={countryInfo.recovered} />
-					<InfoBox title="Deaths" cases={countryInfo.todayDeaths} total={countryInfo.deaths} />
+					<InfoBox isRed active={casesType === 'cases'} onClick={e => setCasesType("cases")} title="Coronavirus cases" cases={prettyPrintStat(countryInfo.todayCases)} total={prettyPrintStat(countryInfo.cases)} />
+					<InfoBox isGreen active={casesType === 'recovered'} onClick={e => setCasesType("recovered")} title="Recovered" cases={prettyPrintStat(countryInfo.todayRecovered)} total={prettyPrintStat(countryInfo.recovered)} />
+					<InfoBox isBlack active={casesType === 'deaths'} onClick={e => setCasesType("deaths")} title="Deaths" cases={prettyPrintStat(countryInfo.todayDeaths)} total={prettyPrintStat(countryInfo.deaths)} />
 				</div>
 
 				{/*map*/}
-				<Map/>
+				<Map casesType={casesType} countries={mapCountries} center={mapCenter} zoom={mapZoom}/>
 			</div>
 
 			<Card className="app__right">
@@ -97,8 +112,8 @@ function App() {
 				<CardContent>
 					<h3>Live Cases by Country</h3>
 					<Table countries={tableData} />
-					<h3>Worldwide new cases</h3>
-					<LineGraph />
+					<h3 className="app__graphTitle">Worldwide new {casesType}</h3>
+					<LineGraph className="app__graph" casesType={casesType} />
 				</CardContent>
 			</Card>
 		</div>
