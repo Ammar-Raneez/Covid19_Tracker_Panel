@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import {FormControl, Select, MenuItem, Card, CardContent} from '@material-ui/core';
+import {FormControl, Select, MenuItem, Card, CardContent, Button} from '@material-ui/core';
 import './App.css';
 import InfoBox from './InfoBox';	
 import Map from './Map';
@@ -120,6 +120,7 @@ function App() {
 
 				{/*map*/}
 				<Map theme={theme} casesType={casesType} countries={mapCountries} center={mapCenter} zoom={mapZoom}/>
+				<Button onClick="./FullMap">Click</Button>
 			</div>
 
 			<Card className={`app__right ${theme}`}>
