@@ -1,0 +1,253 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+#map {
+    height: 100vh;
+}
+
+.text {
+    color: black;
+}
+
+.search-container {
+    width: 330px;
+    height: 50px;
+    border-radius: 30px;
+    position: absolute;
+    z-index: 10;
+    background-color: black;
+    top: 100px;
+    left: 20px;
+    opacity: 0.8;
+    display: none;
+    border: 2px solid red;
+}
+
+.search {
+    display: flex;
+    align-items: center;
+    height: 100%;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+.search input {
+    width: 100%;
+    font-size: 15px;
+    border: none;
+    background-color: transparent;
+    color: white;
+}
+
+.search input:focus {
+    outline: none;
+}
+
+.search i {
+    color: white;
+    font-size: 15;
+}
+
+.stores-list-container {
+    width: 300px;
+    position: absolute;
+    background-color: black;
+    z-index: 10;
+    top: 180px;
+    border-radius: 30px;
+    left: 20px;
+    bottom: 40;
+    padding: 15px;
+    font-family: century;
+    font-weight: bold;
+    opacity: 0.8;
+    display: none;
+    border: 2px solid red;
+}
+
+.stores-list {
+    height: 100%;
+    padding-left: 20px;
+    overflow: auto;
+    padding-right: 20px;
+}
+
+.stores-list::-webkit-scrollbar {
+    display: none;
+}
+
+.store-container {
+    padding-bottom: 10px;
+    display: flex;
+    border-bottom: 1px solid #979797;
+}
+
+.store-info-container {
+    flex-grow: 1;
+}
+
+.store-address {
+    font-size: 16px;
+    color: white;
+    margin-top: 15px;
+}
+
+.store-address span {
+    display: block;
+}
+
+.store-container:hover {
+    background-color: black;
+    opacity: 1;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    transform: scale(1.1);
+}
+.store-container:not(hover){
+    transition: 0.3s ease;
+}
+
+.store-container i, .store-phone-number {
+    color: red;
+}
+
+.store-phone-number {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.store-number-container {
+    align-items: center;
+    display: flex;
+}
+
+.store-number {
+    width: 30px;
+    height: 30px;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    background-color: black;
+    border: 1px solid red;
+}
+
+.menu, .close {
+    position: absolute;
+    z-index: 10;
+    color: white;
+    font-size: 30;
+    -webkit-text-stroke-width: 2px;
+    -webkit-text-stroke-color: black;
+    top: 100;
+    left: 50;
+}
+.close {
+    left: 10;
+}
+.menu:hover, .close:hover {
+    transition: 0.7s ease;
+    color: black;
+    -webkit-text-stroke-width: 2px;
+    -webkit-text-stroke-color: white;
+    cursor: pointer;
+    transform: scale(1.1);
+}
+.menu:not(hover), .close:not(hover) {
+    transition: 0.7s ease;
+}
+
+.countryName {
+    color: green;
+    text-align: center;
+    border-bottom: 1px solid green;
+    margin-bottom: 5px;
+    display: block;
+}
+
+.link {
+    border-top: 1px solid green;
+    margin-top: 5px;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    display: block;
+    color: darkgreen;
+}
+
+.emergency {
+    color: red;
+}
+
+i.phone {
+    background-color: darkgreen;
+    color: white;
+    padding: 2px;
+}
+
+i.emergency {
+    color: white;
+    border: 1px solid red;
+    background-color: red;
+}
+
+span i {
+    border-radius: 50%;
+    padding: 2px;
+    margin-right: 1px;
+}
+
+.dest {
+    text-decoration: none;
+    color: darkgreen;
+}
+
+#search-icon {
+    transition: 0.6s ease-in-out;
+}
+
+#search-icon:hover {
+    color: #555;
+    cursor: pointer;
+}
+
+.msg {
+    border: 1px solid red;
+    padding: 10px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.4rem;
+}
+
+.msgHover {
+    font-size: 1rem;
+}
+
+.sec {
+    padding: 0 20px 0 20px;
+}
+
+.mainCn {
+    font-size: 30px;
+    text-transform: uppercase;
+    letter-spacing: 10px;
+    border: none;
+}
+
+@media (max-width: 700px) {
+    .msg {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
