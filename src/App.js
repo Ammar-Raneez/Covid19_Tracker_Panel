@@ -101,7 +101,9 @@ function App() {
 								{countries.map(country => <MenuItem className={`app__dropdown__moveBottom ${theme === 'DarkMode'? 'DarkMode borders': ''}`} value={country.value}>{country.name}</MenuItem>)}
 							</Select>
 						</FormControl>
+					</div>
 
+					<div className="app__selectboxes">
 						<FormControl className={`app__dropdown ${theme}`}>
 							<Select className={theme} variant="outlined" value={theme} onChange={e => setTheme(e.target.value)}>
 								<MenuItem className={`app__dropdown__moveTop ${theme === 'DarkMode'? 'DarkMode borders': ''}`} value="LightMode">LightMode</MenuItem>
